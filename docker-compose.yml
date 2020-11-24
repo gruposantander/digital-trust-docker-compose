@@ -1,0 +1,69 @@
+version: "3.0"
+
+services:
+
+  dtp-server:
+    env_file: ./docker-compose.env
+    image: docker.pkg.github.com/gruposantander/digital-trust-universal-server/universal-server:latest
+    container_name: dtp-op-server
+    hostname: dtpserver
+    ports:
+      - 8080:8080
+    volumes:
+      - ./config/op-server:/home/op_server/config
+    depends_on:
+      - dtp-mongodb
+    links:
+      - dtp-mongodb
+
+  dtp-spa-authorize:
+    image: docker.pkg.github.com/gruposantander/digital-trust-frontend/nginx-spa:latest
+    container_name: dtp-spa
+    hostname: dtpspa
+    ports:
+      - 8081:8080
+    volumes:
+      - ./config/nginx:/etc/nginx/conf.d:ro
+      - ./config/spa-authorize/config.json:/usr/share/nginx/html/web/assets/config/config.json:ro
+      - ./config/spa-authorize/custom-structure.json:/usr/share/nginx/html/web/assets/config/custom-structure.json:ro
+    links:
+      - dtp-server
+  
+  dtp-demo:
+    image: docker.pkg.github.com/gruposantander/digital-trust-example-journey/demo:latest
+    container_name: dtp-demo
+    hostname: dtpdemo
+    environment:
+      - DEBUG=*
+      - WELL_KNOWN_URL=http://dtp-server:8080/.well-known/openid-configuration
+      - PORT=8000
+      - CLIENT_ID=835822af-ae41-4513-96b0-ec5b619b43a9
+      - REDIRECT_URI=http://localhost:4201/profile
+    volumes:
+      - ${PWD}/config/demo/config.json:/home/demo/demo/assets/config/config.json:ro
+    ports:
+      - 4201:8000
+    links:
+      - dtp-server
+      - dtp-spa-authorize
+
+  dtp-graphql:
+    image: docker.pkg.github.com/gruposantander/digital-trust-graphql-stubs/graphql-stubs:latest
+    container_name: dtp-graphql
+    hostname: dtpgraphql
+    environment:
+      - PORT=3000
+    ports:
+      - 3000:3000
+    volumes:
+      - ./mocks/people:/tmp/people
+
+  dtp-mongodb:
+    image: mongo:4.0.4
+    hostname: dtpmongo
+    ports:
+      - 27017:27017
+      - 27018:27018
+      - 27019:27019
+    volumes:
+      - ./data/db:/data/db

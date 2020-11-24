@@ -1,0 +1,123 @@
+{
+    "age": {
+      "comparatorLabels": {
+        "eq": "",
+        "gt": "Older than",
+        "gte": "Older than",
+        "lt": "Younger than",
+        "lte": "Maximum of"
+      }
+    },
+    "total_balance": {
+      "comparatorLabels": {
+        "eq": "",
+        "gt": "More than",
+        "gte": "At least",
+        "lt": "Less than",
+        "lte": "Maximum of"
+      },
+      "hideLabels": false,
+      "structure": [
+        [
+          "currency"
+        ],
+        [
+          "amount"
+        ]
+      ]
+    },
+    "company_country_incorporation": {
+      "displayName": "Country the company is registered in"
+    },
+    "given_name": {
+      "displayName": "First name"
+    },
+    "family_name": {
+      "displayName": "Surname"
+    },
+    "last_year_money_in": {
+      "displayName": "Total income last year",
+      "structure": [
+        [
+          "amount"
+        ],
+        [
+          "currency"
+        ]
+      ]
+    },
+    "average_monthly_money_in": {
+      "displayName": "Average monthly income",
+      "structure": [
+        [
+          "amount"
+        ],
+        [
+          "currency"
+        ]
+      ]
+    },
+    "birthdate": {
+      "comparatorLabels": {
+        "eq": "",
+        "gt": "After",
+        "gte": "On or after",
+        "lt": "Before",
+        "lte": "On or before"
+      }
+    },
+    "bank_account": {
+      "structure": [
+        [
+          "identifiers",
+          "items",
+          "identification"
+        ]
+      ],
+      "hideLabels": true,
+      "comparatorLabels": {
+        "eq": "",
+        "gt": "Greater than",
+        "gte": "Greater than or equal to",
+        "lt": "Less than",
+        "lte": "Less than or equal to",
+        "some": "Includes"
+      }
+    },
+    "last_quarter_money_in": {
+      "displayName": "Total money in last quarter",
+      "structure": [
+        [
+          "amount"
+        ],
+        [
+          "currency"
+        ]
+      ]
+    },
+    "company_end_date": {
+      "comparatorLabels": {
+        "eq": "",
+        "gt": "After",
+        "gte": "After or on",
+        "lt": "Before",
+        "lte": "Before or on"
+      }
+    },
+    "company_operating": {
+      "displayName": "Company currently operating"
+    },
+    "address": {
+      "structure": [
+        [
+          "street_address"
+        ],
+        [
+          "locality"
+        ],
+        [
+          "region"
+        ]
+      ]
+    }
+  }

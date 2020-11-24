@@ -1,0 +1,1108 @@
+{
+	"info": {
+		"_postman_id": "810f6738-0e36-4a71-b1da-49be52cf3ad0",
+		"name": "Digital Trust Protocol - Local",
+		"description": "This postman collection allows you to setup a new RP client application and to run the steps to complete an E2E flow.\n\n - Run /reg only once to set your own application, taking into account you have to pass app details and public key in the body (see below details for generating new keys)\n - Run Setup every time you open PostMan and before executing next steps. You will need to modify 'Test' tab to update with your JWK\n - Run /initiate-authorize to get a new request_uri. Update 'Pre-request script' tab if you want to change the claims and rest of request details.\n - Copy the request_uri obtained in previous step and compose the /authorize url\n \nExample: \"https://live.iamid.io/web/login/?request_uri=urn:op.iamid.io:GnIw2VWxiMwVQ6WthUSUsczMCsHkcIMnfFYqYKESmD9\"\n\n - Enter SantanderLabs.io test user credentials and consent request, you will be redirected to your redirect_uri and obtain the access code.\n - Run /token updating in the body the code obtained in the previous step, then you will get an id_token in the response body\n - If you want to get OP discovery metadata, run /.well-known/openid-configuration. The configuration includes the available claims you can request in the sandbox environment\n\n\n\n\n** Generating your own private keys\nTo generate your own keys and then replace in the postman collection to be able to complete E2E, follow this steps:\n\n1. Generate key: openssl genrsa -out private.pem 2048\n2. Export Public key to PEM: openssl rsa -in privatekey.key -outform PEM -pubout -out publickey.pem\n3. Install pem-jwk: npm install -g pem-jwk \n3. Convert public key PEM to JWK: pem-jwk publickey.pem > public.jwk\n4. Convert private key PEM to JWK: pem-jwk private.pem > private.jwk",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/reg (Registration Sample App) QuickJobs",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0b9f66c0-5422-41fa-a3dc-6921bf8f808e",
+						"exec": [
+							"",
+							"",
+							"if( pm.response.code === 201 ){",
+							"    const body = JSON.parse(responseBody)",
+							"    pm.globals.set(\"regAccessToken\", body.registration_access_token)",
+							"    pm.globals.set(\"newClientId\", body.client_id)",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "38729410-d589-4543-baf3-22722c9a1ac1",
+						"exec": [
+							"const kid = \"QuickJobs_KEY\";",
+							"pm.environment.set('kid', kid);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"client_name\": \"QuickJobs\",\n\t\"logo_uri\": \"https://raw.githubusercontent.com/miguel-santander/staticFiles/master/App%20icons/Icon-512.png\",\n\t\"policy_uri\": \"https://www.santanderlabs.io/en/privacy-policy\",\n\t\"tos_uri\": \"https://www.santanderlabs.io/en/terms-and-conditions\",\n\t\"redirect_uris\": [\"http://localhost:4201/profile\"],\n\t\"application_type\": \"web\",\n\t\"token_endpoint_auth_method\": \"private_key_jwt\",\n\t\"token_endpoint_auth_signing_alg\": \"RS256\",\n\t\"jwks\": {\n\t  \"keys\": [{\n\t    \"kty\": \"RSA\",\n\t    \"e\": \"AQAB\",\n\t    \"kid\": \"{{kid}}\",\n\t    \"n\": \"vaFw6y9VgOgsCZhJnMKM3nEmattuJ57QXiGoccI6bARHXjnUzTfmhayT1MRwVo3bgfj6kSAW0IxV8ccKlxSsXZET1yH4N-5LrWoLbhbeC9LNEU4pa26aPkltwVGdrhXMAvezY19E8j1evEiQVQyGEtUjHyT7bBz3phXoDjWMdnm9jNlkFFBSRfUvfXD03kRzffOT-3tg-OC1kH1MajgvKNdqh0BjvbWYXAbJgwf2oVo8oW19-U7rt1uxJvBrp5LDyWouorQmw66dgDpaxyUM3wcz5Ozw5Edep_1ke72Lbrl7a-qe0jweeFOUN5VtaCehsnFSx5qBS4E21FGC7UZyGQ\"\n\t  }]\n\t}\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/reg",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"reg"
+					]
+				},
+				"description": "Run /reg only once to set your own application, taking into account you have to pass app details and public key in the body (see below details for generating new keys)\n\n** Generating your own private keys\nTo generate your own keys and then replace in the postman collection to be able to complete E2E, follow this steps:\n\n1. Generate key: openssl genrsa -out private.pem 2048\n2. Export Public key to PEM: openssl rsa -in privatekey.key -outform PEM -pubout -out publickey.pem\n3. Install pem-jwk: npm install -g pem-jwk \n3. Convert public key PEM to JWK: pem-jwk publickey.pem > public.jwk\n4. Convert private key PEM to JWK: pem-jwk private.pem > private.jwk"
+			},
+			"response": []
+		},
+		{
+			"name": "/reg (Registration Sample App) Demo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0b9f66c0-5422-41fa-a3dc-6921bf8f808e",
+						"exec": [
+							"",
+							"",
+							"if( pm.response.code === 201 ){",
+							"    const body = JSON.parse(responseBody)",
+							"    pm.globals.set(\"regAccessToken\", body.registration_access_token)",
+							"    pm.globals.set(\"newClientId\", body.client_id)",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "38729410-d589-4543-baf3-22722c9a1ac1",
+						"exec": [
+							"const kid = \"QuickJobs_KEY\";",
+							"pm.environment.set('kid', kid);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"client_name\": \"Demo\",\n\t\"logo_uri\": \"https://raw.githubusercontent.com/miguel-santander/staticFiles/master/App%20icons/Icon-512.png\",\n\t\"policy_uri\": \"https://www.santanderlabs.io/en/privacy-policy\",\n\t\"tos_uri\": \"https://www.santanderlabs.io/en/terms-and-conditions\",\n\t\"redirect_uris\": [\"https://demo.iamid.io/profile\"],\n\t\"application_type\": \"web\",\n\t\"token_endpoint_auth_method\": \"private_key_jwt\",\n\t\"token_endpoint_auth_signing_alg\": \"RS256\",\n\t\"jwks\": {\n\t  \"keys\": [{\n\t    \"kty\": \"RSA\",\n\t    \"e\": \"AQAB\",\n\t    \"kid\": \"{{kid}}\",\n\t    \"n\": \"vaFw6y9VgOgsCZhJnMKM3nEmattuJ57QXiGoccI6bARHXjnUzTfmhayT1MRwVo3bgfj6kSAW0IxV8ccKlxSsXZET1yH4N-5LrWoLbhbeC9LNEU4pa26aPkltwVGdrhXMAvezY19E8j1evEiQVQyGEtUjHyT7bBz3phXoDjWMdnm9jNlkFFBSRfUvfXD03kRzffOT-3tg-OC1kH1MajgvKNdqh0BjvbWYXAbJgwf2oVo8oW19-U7rt1uxJvBrp5LDyWouorQmw66dgDpaxyUM3wcz5Ozw5Edep_1ke72Lbrl7a-qe0jweeFOUN5VtaCehsnFSx5qBS4E21FGC7UZyGQ\"\n\t  }]\n\t}\n}"
+				},
+				"url": {
+					"raw": "https://live.iamid.io/reg",
+					"protocol": "https",
+					"host": [
+						"live",
+						"iamid",
+						"io"
+					],
+					"path": [
+						"reg"
+					]
+				},
+				"description": "Run /reg only once to set your own application, taking into account you have to pass app details and public key in the body (see below details for generating new keys)\n\n** Generating your own private keys\nTo generate your own keys and then replace in the postman collection to be able to complete E2E, follow this steps:\n\n1. Generate key: openssl genrsa -out private.pem 2048\n2. Export Public key to PEM: openssl rsa -in privatekey.key -outform PEM -pubout -out publickey.pem\n3. Install pem-jwk: npm install -g pem-jwk \n3. Convert public key PEM to JWK: pem-jwk publickey.pem > public.jwk\n4. Convert private key PEM to JWK: pem-jwk private.pem > private.jwk"
+			},
+			"response": []
+		},
+		{
+			"name": "Set Up",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "469df052-1d9f-40da-8e22-a78c68e22111",
+						"exec": [
+							"",
+							"",
+							"",
+							"// JWK that conatin private and public key for test, you can change this value but need to register in OP to make it works.",
+							" const jwk = {",
+							" \"d\": \"M4KI87mV1kA6xhhx1n0aWsoNj3UvhN-k5gzqfowt5m17HWNEJMKMgb8RIPiDM1-xQqrpFUbMK7YTGmvguo1JDNl9tDBsBnVaZS6rECpyAnAueAbtRVtz1nuHrr2GwWT2V9AFEHcueUamVyq22gNe3_q5YZpgGUv9EUZeFI4DK6MKFGlJkzU0yMLWOiubi_08sI5-FRL7c93nNs82xALlqgRGvAC0Ua-BBr15dbpWXZO4u7wN2WwZSxVqM3nPzK_Lxnb18O-twDcfRQlJ-fu8vFXOGqGMU87ZpMBr5wEXpNSBvdkxI-0gt0QPXbXNSkNmptP5OvKLU_3KhOL8E32CCQ\",",
+							"    \"dp\": \"t7CiJHm6nUL13w0FRqxZ6cXW6L-uacblkwmUF7QEi-rYd3qtSXex8aZquvNPgdJ1Tzz6m4KFmMnmkIqFqbjR7BJJP1kvzjdy1BZZF7B04vOEE-ahNusZSgK-AwWtjWZzpTqWEtYJQtF5fdbJ47XsL-QLJr68r8peHRiww323HIU\",",
+							"    \"dq\": \"kqU_SeCzkvcRbZUsiTpex8KorlcJ4LWo5KEQXG0wL9ICBf7OFHEOXplAl0RcfOhMraap67JfwpK85trz3AdGsvNWr1gE1dhIm7KUBo_Vejz-JaT9aDWZg0pp4GCgqUQGVhALBGgG5JX8aO9Ot3mRrkjonSmN-sD07rlmjXUVOTU\",",
+							"    \"e\": \"AQAB\",",
+							"    \"kty\": \"RSA\",",
+							"    \"n\": \"vaFw6y9VgOgsCZhJnMKM3nEmattuJ57QXiGoccI6bARHXjnUzTfmhayT1MRwVo3bgfj6kSAW0IxV8ccKlxSsXZET1yH4N-5LrWoLbhbeC9LNEU4pa26aPkltwVGdrhXMAvezY19E8j1evEiQVQyGEtUjHyT7bBz3phXoDjWMdnm9jNlkFFBSRfUvfXD03kRzffOT-3tg-OC1kH1MajgvKNdqh0BjvbWYXAbJgwf2oVo8oW19-U7rt1uxJvBrp5LDyWouorQmw66dgDpaxyUM3wcz5Ozw5Edep_1ke72Lbrl7a-qe0jweeFOUN5VtaCehsnFSx5qBS4E21FGC7UZyGQ\",",
+							"    \"p\": \"7HdTNPMDCsyN5Mzm93hGMCvup5ot2NMczYUUVOGegems68qPp4YWJvZlw2MLFBLSgDKTYJAFcolGOE3pjdiI4Td4hVPM6FoyM7gEqBRrJNc20UyMlYIl8MD5Hq6m8OJoWXU13LiBatQpyxToNS4moLtGpOIjVTASYaWoWCv7bN8\",",
+							"    \"q\": \"zUupPmUbz4rHzIBd9gqb3MqCkfZa1yuG1OiLt1JkGZq2Z9bmSIHFT4rAg56uoB7ZyUSmCPhJWRg-hia1qATTwCPAL9pP-xWiuuKiBoSC_dvjcn5hsee1JxlY4KhYr82wJnH9gkOhRJcQ3qbfkMBdUBVMjwXTHdzkDfJFLjpwiAc\",",
+							"    \"qi\": \"gYv98jxf9B6dnYUh1CDqRVKS8fDsEWXTilE1N5FnfCIvhs37LhKasFzq2G0qK33RpeQYrp2Qi6zSsyiwIt8ccS6TfsI2J1Q1I79iu0X6ekV_0U5PfwFh2sq6QLvWFS7GAIwCkLAuOEVbwxEKxQ1pkB00SWVy28ErRJjhGu2JOyU\",",
+							"    \"use\": \"sig\",",
+							"    \"kid\": \"QuickJobs_KEY\"",
+							"    }",
+							"",
+							"// Config object used to generate automatically tokens and more...",
+							"const cfg = {",
+							"    // JWK containing the private key for sign the security tokens",
+							"    jwk,",
+							"    // The client_id that is registeredin the OP server.",
+							"    clientID : pm.globals.get(\"newClientId\"),",
+							"    // The aud parameter accepted by the OP",
+							"    aud : (pm.environment.get('op-server-issuer')) || \"https://op.iamid.io\"",
+							"}",
+							"",
+							"/**",
+							" *  Don't update the code after this line",
+							" */ ",
+							"pm.globals.set(\"cfg\", cfg)",
+							"pm.globals.set(\"pmlib\", responseBody)",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "4a1873e6-cac6-454b-b008-67abd814b0b1",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://joolfe.github.io/postman-util-lib/dist/bundle.js",
+					"protocol": "https",
+					"host": [
+						"joolfe",
+						"github",
+						"io"
+					],
+					"path": [
+						"postman-util-lib",
+						"dist",
+						"bundle.js"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/initiate-authorize",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "df559d64-fdde-4b17-ac14-0b8cb83cae3f",
+						"exec": [
+							" //add here the PKCE code challenge and verifier ",
+							" pm.variables.set('codeChallenge', \"UuMq2pfX3ebqA0itFRMDDp73xAbFuL8A8JZruD0Krlk\");",
+							" pm.variables.set('codeVerifier', \"E9EPu2Xxu57PuSJtemFxbiS0b7oUNKCAETNZmpou97Qk6OwXqcZkubycI47751phScgP5JOFENK3CGoo5r9Yf24ReDLXNdkWs3ZFqEvAvZJ0oOhjKwvqSbPWZd6iETub\");",
+							" ",
+							" //////////////////////////////////////////////////",
+							" pm.variables.set('redirect_uri', \"http://localhost:4201/profile\"); ",
+							" ",
+							"/**",
+							" *  Fill the request object below ",
+							" *  take into account that field like iss, aud and client_id will be filled automatically with the cfg values",
+							" *  if are empty in this object.",
+							" */",
+							" const request_object = {",
+							"  \"response_type\": \"code\",",
+							"  \"redirect_uri\": pm.variables.get(\"redirect_uri\"),",
+							"//   \"code_challenge\": pm.variables.get(\"codeChallenge\"),",
+							"//   \"code_challenge_method\": \"S256\",",
+							"  \"nonce\": Math.random().toString(36).substring(7),",
+							"  \"scope\": \"openid\",",
+							"  \"state\": \"myState\",",
+							"  \"claims\": {",
+							"      \"purpose\": \"In order to put you in contact with the employeer, we need to validate some details\",",
+							"    \"id_token\": {",
+							"        \"assertion_claims\": {",
+							"            ",
+							"            \"age\":{",
+							"                \"purpose\":\"We want to check that you are older than 18\",",
+							"                \"essential\":true,",
+							"                \"assertion\": {\"or\" : [ { \"gt\": \"20\", \"lt\": \"30\" },{ \"gt\": \"40\", \"lt\": \"50\"} ] }",
+							"                ",
+							"            },",
+							"           \"address\": {",
+							"               \"purpose\":\"We want to check you are UK resident\",",
+							"               \"essential\":true,",
+							"               \"ial\" : 1,",
+							"               \"assertion\": { ",
+							"                   \"props\": {",
+							"                       \"country\": { \"eq\" : \"United Kingdom\"},",
+							"                       \"postal_code\": { \"eq\" : \"QZBAD9\"}",
+							"                   }",
+							"               }",
+							"           },",
+							"            \"total_balance\":{",
+							"               \"purpose\":\"We would like to ensure you have a healthy balance\",",
+							"               \"essential\":false,",
+							"               \"ial\" : 1,",
+							"               \"assertion\": {",
+							"                   \"props\": {",
+							"                       \"amount\": {\"gte\": \"500\" },\"currency\": {\"eq\": \"GBP\" }}",
+							"               }",
+							"           },",
+							"           \"bank_account\":{",
+							"               \"purpose\":\"We would like to check your bank account detail\",",
+							"               \"essential\":false,",
+							"               \"ial\" : 1,",
+							"               \"assertion\": {",
+							"                   \"props\": {",
+							"                       \"identifiers\": { \"some\": { \"props\": { \"identification\": {\"eq\": \"09012700050322\" },\"type\": {\"eq\": \"UK.SortCodeAccountNumber\" } } } }}",
+							"               }",
+							"           }",
+							"        },",
+							"        \"email\": {",
+							"            \"purpose\":\"We will use you email for contact purposes\",",
+							"            \"essential\": false",
+							"          },",
+							"      \"phone_number\": {",
+							"          \"purpose\":\"We will give your phone number to the employeer\",",
+							"        \"essential\": true",
+							"      },",
+							"      \"address\": {",
+							"          \"purpose\":\"We want all your addresses\",",
+							"        \"essential\": false",
+							"      },",
+							"      \"bank_account\": {",
+							"          \"purpose\":\"We need your bank details\",",
+							"        \"essential\": true",
+							"      }",
+							"      ",
+							"}",
+							"}",
+							"  ",
+							"}",
+							"",
+							"",
+							"/**",
+							" * !!!! DONT TOUCH !!!!!",
+							" * Don't update the code after this line",
+							" */",
+							"// Check if Set Up has been executed",
+							"if (!pm.globals.get(\"pmlib\")) { throw new Error(\"You should execute 'Set Up' request before start the flow\"); }",
+							"",
+							"// Load library from global variable",
+							"eval(pm.globals.get('pmlib'))",
+							"",
+							"// Load config",
+							"const cfg = pm.globals.get(\"cfg\")",
+							"",
+							"// Create a client assertion 'private_key_jwt'",
+							"const privateKeyJwt = pmlib.clientAssertPrivateKey(cfg.jwk, cfg.clientID, cfg.aud)",
+							"console.log('\"private_key_jwt\": ' + privateKeyJwt)",
+							"console.log('\"client_id\": ' + cfg.clientID)",
+							"pm.variables.set('clientAssertionToken', privateKeyJwt)",
+							"",
+							"// Create a request Object",
+							"const payload = Object.assign({ aud: cfg.aud, iss: cfg.clientID, client_id: cfg.clientID }, request_object, request_object)",
+							"const jws = pmlib.jwtSign(cfg.jwk, payload, { kid: cfg.jwk.kid })",
+							"console.log('Signed JWT: ' +jws)",
+							"pm.variables.set('requestObject', jws)",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "b0474349-6f9c-4d58-9439-93f68ea37a1b",
+						"exec": [
+							"/**",
+							" *  Don't update the code after this line",
+							" */ ",
+							"const body = JSON.parse(responseBody)",
+							"pm.globals.set(\"requestUri\", body.request_uri)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "client_assertion_type",
+							"value": "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
+							"type": "text"
+						},
+						{
+							"key": "client_assertion",
+							"value": "{{clientAssertionToken}}",
+							"type": "text"
+						},
+						{
+							"key": "request",
+							"value": "{{requestObject}}",
+							"description": "To set the request, modify Pre-Request object",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/initiate-authorize",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"initiate-authorize"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/initiate-authorize hilton",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "df559d64-fdde-4b17-ac14-0b8cb83cae3f",
+						"exec": [
+							" //add here the PKCE code challenge and verifier ",
+							" pm.variables.set('codeChallenge', \"UuMq2pfX3ebqA0itFRMDDp73xAbFuL8A8JZruD0Krlk\");",
+							" pm.variables.set('codeVerifier', \"E9EPu2Xxu57PuSJtemFxbiS0b7oUNKCAETNZmpou97Qk6OwXqcZkubycI47751phScgP5JOFENK3CGoo5r9Yf24ReDLXNdkWs3ZFqEvAvZJ0oOhjKwvqSbPWZd6iETub\");",
+							" ",
+							" //////////////////////////////////////////////////",
+							" pm.variables.set('redirect_uri', \"http://localhost:4201/profile\"); ",
+							" ",
+							"/**",
+							" *  Fill the request object below ",
+							" *  take into account that field like iss, aud and client_id will be filled automatically with the cfg values",
+							" *  if are empty in this object.",
+							" */",
+							" const request_object = {",
+							"  \"response_type\": \"code\",",
+							"  \"redirect_uri\": pm.variables.get(\"redirect_uri\"),",
+							"//   \"code_challenge\": pm.variables.get(\"codeChallenge\"),",
+							"//   \"code_challenge_method\": \"S256\",",
+							"  \"nonce\": Math.random().toString(36).substring(7),",
+							"  \"scope\": \"openid\",",
+							"  \"state\": \"myState\",",
+							"  \"claims\": {",
+							"      \"purpose\": \"In order to put you in contact with the employeer, we need to validate some details\",",
+							"    \"id_token\": {",
+							"        \"assertion_claims\": {",
+							"            \"given_name\": {",
+							"                \"purpose\":\"We will use you name for contact purposes\",",
+							"                \"essential\": false,",
+							"                \"assertion\": {\"eq\":\"Yost\"}",
+							"              },",
+							"              \"address\": {",
+							"               \"purpose\":\"We want to check you are UK resident\",",
+							"               \"essential\":true,",
+							"               \"ial\" : 2,",
+							"               \"assertion\": { ",
+							"                   \"props\": {",
+							"                       \"country\": { \"eq\" : \"United Kingdom\"},",
+							"                       \"postal_code\": { \"eq\" : \"QZBAD9\"}",
+							"                   }",
+							"               }",
+							"             },",
+							"            \"total_balance\":{",
+							"               \"purpose\":\"We would like to ensure you have a healthy balance\",",
+							"               \"essential\":true,",
+							"               \"ial\" : 3,",
+							"               \"assertion\": {",
+							"                   \"props\": {",
+							"                       \"amount\": {\"gte\": \"500\" },\"currency\": {\"eq\": \"GBP\" }}",
+							"               }",
+							"           ",
+							"           },",
+							"           \"bank_account\":{",
+							"               \"purpose\":\"We would like to check your bank account detail\",",
+							"               \"essential\":false,",
+							"               \"ial\" : 1,",
+							"               \"assertion\": {",
+							"                   \"props\": {",
+							"                       \"identifiers\": { \"some\": { \"props\": { \"identification\": {\"eq\": \"09012700047186\" },\"type\": {\"eq\": \"UK.SortCodeAccountNumber\" } } } }}",
+							"               }",
+							"           }",
+							"            ",
+							"        },",
+							"        ",
+							"        \"given_name\":null,",
+							"        \"family_name\":null,",
+							"        \"gender\":null,",
+							"        \"birthdate\":null,",
+							"        \"age\":null,",
+							"        \"civil_status\":null,",
+							"        \"country_of_birth\":null,",
+							"        \"nationality\":null,",
+							"        \"phone_number\":null,",
+							"        \"email\":null,",
+							"        \"address\":null,",
+							"        \"national_card_id\":null,",
+							"        \"passport_id\":null,",
+							"        \"driving_license_id\":null,",
+							"        \"bank_account\":null,",
+							"        \"total_balance\":null,",
+							"        \"last_year_money_in\":null,",
+							"        \"last_quarter_money_in\":null,",
+							"        \"average_monthly_money_in\":null",
+							"}",
+							"}",
+							"  ",
+							"}",
+							"",
+							"",
+							"/**",
+							" * !!!! DONT TOUCH !!!!!",
+							" * Don't update the code after this line",
+							" */",
+							"// Check if Set Up has been executed",
+							"if (!pm.globals.get(\"pmlib\")) { throw new Error(\"You should execute 'Set Up' request before start the flow\"); }",
+							"",
+							"// Load library from global variable",
+							"eval(pm.globals.get('pmlib'))",
+							"",
+							"// Load config",
+							"const cfg = pm.globals.get(\"cfg\")",
+							"",
+							"// Create a client assertion 'private_key_jwt'",
+							"const privateKeyJwt = pmlib.clientAssertPrivateKey(cfg.jwk, cfg.clientID, cfg.aud)",
+							"console.log('\"private_key_jwt\": ' + privateKeyJwt)",
+							"console.log('\"client_id\": ' + cfg.clientID)",
+							"pm.variables.set('clientAssertionToken', privateKeyJwt)",
+							"",
+							"// Create a request Object",
+							"const payload = Object.assign({ aud: cfg.aud, iss: cfg.clientID, client_id: cfg.clientID }, request_object, request_object)",
+							"const jws = pmlib.jwtSign(cfg.jwk, payload, { kid: cfg.jwk.kid })",
+							"console.log('Signed JWT: ' +jws)",
+							"pm.variables.set('requestObject', jws)",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "b0474349-6f9c-4d58-9439-93f68ea37a1b",
+						"exec": [
+							"/**",
+							" *  Don't update the code after this line",
+							" */ ",
+							"const body = JSON.parse(responseBody)",
+							"pm.globals.set(\"requestUri\", body.request_uri)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "client_assertion_type",
+							"value": "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
+							"type": "text"
+						},
+						{
+							"key": "client_assertion",
+							"value": "{{clientAssertionToken}}",
+							"type": "text"
+						},
+						{
+							"key": "request",
+							"value": "{{requestObject}}",
+							"description": "To set the request, modify Pre-Request object",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/initiate-authorize",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"initiate-authorize"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/initiate-authorize luma",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "df559d64-fdde-4b17-ac14-0b8cb83cae3f",
+						"exec": [
+							" //add here the PKCE code challenge and verifier ",
+							" pm.variables.set('codeChallenge', \"UuMq2pfX3ebqA0itFRMDDp73xAbFuL8A8JZruD0Krlk\");",
+							" pm.variables.set('codeVerifier', \"E9EPu2Xxu57PuSJtemFxbiS0b7oUNKCAETNZmpou97Qk6OwXqcZkubycI47751phScgP5JOFENK3CGoo5r9Yf24ReDLXNdkWs3ZFqEvAvZJ0oOhjKwvqSbPWZd6iETub\");",
+							" ",
+							" //////////////////////////////////////////////////",
+							" pm.variables.set('redirect_uri', \"http://localhost:4201/profile\"); ",
+							" ",
+							"/**",
+							" *  Fill the request object below ",
+							" *  take into account that field like iss, aud and client_id will be filled automatically with the cfg values",
+							" *  if are empty in this object.",
+							" */",
+							" const request_object = {",
+							"  \"response_type\": \"code\",",
+							"  \"redirect_uri\": pm.variables.get(\"redirect_uri\"),",
+							"//   \"code_challenge\": pm.variables.get(\"codeChallenge\"),",
+							"//   \"code_challenge_method\": \"S256\",",
+							"  \"nonce\": Math.random().toString(36).substring(7),",
+							"  \"scope\": \"openid\",",
+							"  \"state\": \"myState\",",
+							"  \"claims\": {",
+							"      \"purpose\": \"In order to put you in contact with the employeer, we need to validate some details\",",
+							"    \"id_token\": {",
+							"        \"assertion_claims\": {",
+							"            \"given_name\": {",
+							"                \"purpose\":\"We will use you name for contact purposes\",",
+							"                \"essential\": false,",
+							"                \"assertion\": {\"eq\":\"Yost\"}",
+							"              },",
+							"              \"address\": {",
+							"               \"purpose\":\"We want to check you are UK resident\",",
+							"               \"essential\":true,",
+							"               \"ial\" : 1,",
+							"               \"assertion\": { ",
+							"                   \"props\": {",
+							"                       \"country\": { \"eq\" : \"United Kingdom\"},",
+							"                       \"postal_code\": { \"eq\" : \"QZBAD9\"}",
+							"                   }",
+							"               }",
+							"             },",
+							"            \"total_balance\":{",
+							"               \"purpose\":\"We would like to ensure you have a healthy balance\",",
+							"               \"essential\":true,",
+							"               \"ial\" : 1,",
+							"               \"assertion\": {",
+							"                   \"props\": {",
+							"                       \"amount\": {\"gte\": \"500\" },\"currency\": {\"eq\": \"GBP\" }}",
+							"               }",
+							"           ",
+							"           },",
+							"           \"bank_account\":{",
+							"               \"purpose\":\"We would like to check your bank account detail\",",
+							"               \"essential\":false,",
+							"               \"ial\" : 1,",
+							"               \"assertion\": {",
+							"                   \"props\": {",
+							"                       \"identifiers\": { \"some\": { \"props\": { \"identification\": {\"eq\": \"09012700047186\" },\"type\": {\"eq\": \"UK.SortCodeAccountNumber\" } } } }}",
+							"               }",
+							"           }",
+							"            ",
+							"        },",
+							"        ",
+							"        \"given_name\":null,",
+							"        \"family_name\":null,",
+							"        \"gender\":null,",
+							"        \"birthdate\":null,",
+							"        \"age\":null,",
+							"        \"civil_status\":null,",
+							"        \"country_of_birth\":null,",
+							"        \"nationality\":null,",
+							"        \"phone_number\":null,",
+							"        \"email\":null,",
+							"        \"address\":null,",
+							"        \"national_card_id\":null,",
+							"        \"passport_id\":null,",
+							"        \"driving_license_id\":null,",
+							"        \"bank_account\":null,",
+							"        \"total_balance\":null,",
+							"        \"last_year_money_in\":null,",
+							"        \"last_quarter_money_in\":null,",
+							"        \"average_monthly_money_in\":null",
+							"        ",
+							"      ",
+							"}",
+							"}",
+							"  ",
+							"}",
+							"",
+							"",
+							"/**",
+							" * !!!! DONT TOUCH !!!!!",
+							" * Don't update the code after this line",
+							" */",
+							"// Check if Set Up has been executed",
+							"if (!pm.globals.get(\"pmlib\")) { throw new Error(\"You should execute 'Set Up' request before start the flow\"); }",
+							"",
+							"// Load library from global variable",
+							"eval(pm.globals.get('pmlib'))",
+							"",
+							"// Load config",
+							"const cfg = pm.globals.get(\"cfg\")",
+							"",
+							"// Create a client assertion 'private_key_jwt'",
+							"const privateKeyJwt = pmlib.clientAssertPrivateKey(cfg.jwk, cfg.clientID, cfg.aud)",
+							"console.log('\"private_key_jwt\": ' + privateKeyJwt)",
+							"console.log('\"client_id\": ' + cfg.clientID)",
+							"pm.variables.set('clientAssertionToken', privateKeyJwt)",
+							"",
+							"// Create a request Object",
+							"const payload = Object.assign({ aud: cfg.aud, iss: cfg.clientID, client_id: cfg.clientID }, request_object, request_object)",
+							"const jws = pmlib.jwtSign(cfg.jwk, payload, { kid: cfg.jwk.kid })",
+							"console.log('Signed JWT: ' +jws)",
+							"pm.variables.set('requestObject', jws)",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "b0474349-6f9c-4d58-9439-93f68ea37a1b",
+						"exec": [
+							"/**",
+							" *  Don't update the code after this line",
+							" */ ",
+							"const body = JSON.parse(responseBody)",
+							"pm.globals.set(\"requestUri\", body.request_uri)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "client_assertion_type",
+							"value": "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
+							"type": "text"
+						},
+						{
+							"key": "client_assertion",
+							"value": "{{clientAssertionToken}}",
+							"type": "text"
+						},
+						{
+							"key": "request",
+							"value": "{{requestObject}}",
+							"description": "To set the request, modify Pre-Request object",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/initiate-authorize",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"initiate-authorize"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/token (Update body param with obtained code )",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "5df9fa2b-8153-46e7-9778-0361c55f2511",
+						"exec": [
+							"/**",
+							" * !!!! DONT TOUCH !!!!!",
+							" * Don't update the code after this line",
+							" */",
+							"// Check if Set Up has been executed",
+							"if (!pm.globals.get('pmlib')) { throw new Error(\"You should execute 'Set Up' request before start the flow\"); }",
+							"",
+							"// Load library from global variable",
+							"eval(pm.globals.get('pmlib'));",
+							"",
+							"// Load config",
+							"const cfg = pm.globals.get('cfg');",
+							"",
+							"// Create a client assertion 'private_key_jwt'",
+							"const privateKeyJwt = pmlib.clientAssertPrivateKey(cfg.jwk, cfg.clientID, cfg.aud)",
+							"console.log('\"private_key_jwt\": ' + privateKeyJwt)",
+							"pm.variables.set('clientAssertionToken', privateKeyJwt)"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "c48fee25-087e-40f0-92d8-6022f17a4c15",
+						"exec": [
+							"",
+							"const body = JSON.parse(responseBody)",
+							"pm.globals.set(\"access_token_me\", body.access_token)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "authorization_code",
+							"type": "text"
+						},
+						{
+							"key": "code",
+							"value": "fvmdfNHCvbsNS5hBFCBs0nK21Aonh-rtTD0it6nBq0G",
+							"description": "Update this value with code obtained in authorize callback",
+							"type": "text"
+						},
+						{
+							"key": "client_assertion_type",
+							"value": "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
+							"type": "text"
+						},
+						{
+							"key": "client_assertion",
+							"value": "{{clientAssertionToken}}",
+							"type": "text"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "http://localhost:4201/profile",
+							"description": "This needs to match your application redirect_uri",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/.well-known/openid-configuration",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "te",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/.well-known/openid-configuration",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						".well-known",
+						"openid-configuration"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/initiate-authorize Copy",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "df559d64-fdde-4b17-ac14-0b8cb83cae3f",
+						"exec": [
+							" //add here the PKCE code challenge and verifier ",
+							" pm.variables.set('codeChallenge', \"UuMq2pfX3ebqA0itFRMDDp73xAbFuL8A8JZruD0Krlk\");",
+							" pm.variables.set('codeVerifier', \"E9EPu2Xxu57PuSJtemFxbiS0b7oUNKCAETNZmpou97Qk6OwXqcZkubycI47751phScgP5JOFENK3CGoo5r9Yf24ReDLXNdkWs3ZFqEvAvZJ0oOhjKwvqSbPWZd6iETub\");",
+							" ",
+							" //////////////////////////////////////////////////",
+							" pm.variables.set('redirect_uri', \"http://localhost:4201/profile\"); ",
+							" ",
+							"/**",
+							" *  Fill the request object below ",
+							" *  take into account that field like iss, aud and client_id will be filled automatically with the cfg values",
+							" *  if are empty in this object.",
+							" */",
+							" const request_object = {",
+							"  \"response_type\": \"code\",",
+							"  \"redirect_uri\": pm.variables.get(\"redirect_uri\"),",
+							"//   \"code_challenge\": pm.variables.get(\"codeChallenge\"),",
+							"//   \"code_challenge_method\": \"S256\",",
+							"  \"nonce\": Math.random().toString(36).substring(7),",
+							"  \"scope\": \"openid\",",
+							"  \"state\": \"myState\",",
+							"  \"claims\": {",
+							"      \"purpose\": \"In order to put you in contact with the employeer, we need to validate some details\",",
+							"    \"id_token\": {",
+							"        \"assertion_claims\": {",
+							"            ",
+							"            \"age\":{",
+							"                \"purpose\":\"We want to check that you are older than 18\",",
+							"                \"essential\":true,",
+							"                \"assertion\": {\"gte\": 18}",
+							"                ",
+							"            },",
+							"           \"address\": {",
+							"               \"purpose\":\"We want to check you are UK resident\",",
+							"               \"essential\":true,",
+							"               \"ial\" : 1,",
+							"               \"assertion\": { ",
+							"                   \"props\": {",
+							"                       \"country\": { \"eq\" : \"United Kingdom\"},",
+							"                       \"postal_code\": { \"eq\" : \"\"}",
+							"                   }",
+							"               }",
+							"           },",
+							"            \"total_balance\":{",
+							"               \"purpose\":\"We would like to ensure you have a healthy balance\",",
+							"               \"essential\":false,",
+							"               \"ial\" : 1,",
+							"               \"assertion\": {",
+							"                   \"props\": {",
+							"                       \"amount\": {\"gte\": \"500\" },\"currency\": {\"eq\": \"GBP\" }}",
+							"               }",
+							"           },",
+							"           \"bank_account\":{",
+							"               \"purpose\":\"We would like to check your bank account detail\",",
+							"               \"essential\":false,",
+							"               \"ial\" : 1,",
+							"               \"assertion\": {",
+							"                   \"props\": {",
+							"                       \"identifiers\": { \"some\": { \"props\": { \"identification\": {\"eq\": \"09012700046721\" },\"type\": {\"eq\": \"UK.SortCodeAccountNumber\" } } } }}",
+							"               }",
+							"           }",
+							"        },",
+							"        \"email\": {",
+							"            \"purpose\":\"We will use you email for contact purposes\",",
+							"            \"essential\": false",
+							"          },",
+							"      \"phone_number\": {",
+							"          \"purpose\":\"We will give your phone number to the employeer\",",
+							"        \"essential\": true",
+							"      },",
+							"      \"address\": {",
+							"          \"purpose\":\"We want all your addresses\",",
+							"        \"essential\": false",
+							"      },",
+							"      \"bank_account\": {",
+							"          \"purpose\":\"We need your bank details\",",
+							"        \"essential\": true",
+							"      }",
+							"      ",
+							"}",
+							"}",
+							"  ",
+							"}",
+							"",
+							"",
+							"/**",
+							" * !!!! DONT TOUCH !!!!!",
+							" * Don't update the code after this line",
+							" */",
+							"// Check if Set Up has been executed",
+							"if (!pm.globals.get(\"pmlib\")) { throw new Error(\"You should execute 'Set Up' request before start the flow\"); }",
+							"",
+							"// Load library from global variable",
+							"eval(pm.globals.get('pmlib'))",
+							"",
+							"// Load config",
+							"const cfg = pm.globals.get(\"cfg\")",
+							"",
+							"// Create a client assertion 'private_key_jwt'",
+							"const privateKeyJwt = pmlib.clientAssertPrivateKey(cfg.jwk, cfg.clientID, cfg.aud)",
+							"console.log('\"private_key_jwt\": ' + privateKeyJwt)",
+							"console.log('\"client_id\": ' + cfg.clientID)",
+							"pm.variables.set('clientAssertionToken', privateKeyJwt)",
+							"",
+							"// Create a request Object",
+							"const payload = Object.assign({ aud: cfg.aud, iss: cfg.clientID, client_id: cfg.clientID }, request_object, request_object)",
+							"const jws = pmlib.jwtSign(cfg.jwk, payload, { kid: cfg.jwk.kid })",
+							"console.log('Signed JWT: ' +jws)",
+							"pm.variables.set('requestObject', jws)",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "b0474349-6f9c-4d58-9439-93f68ea37a1b",
+						"exec": [
+							"/**",
+							" *  Don't update the code after this line",
+							" */ ",
+							"const body = JSON.parse(responseBody)",
+							"pm.globals.set(\"requestUri\", body.request_uri)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "client_assertion_type",
+							"value": "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
+							"type": "text"
+						},
+						{
+							"key": "client_assertion",
+							"value": "{{clientAssertionToken}}",
+							"type": "text"
+						},
+						{
+							"key": "request",
+							"value": "{{requestObject}}",
+							"description": "To set the request, modify Pre-Request object",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/initiate-authorize",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"initiate-authorize"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "2f3353ac-5081-4f0f-96e2-a0f86d11ec66",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "80903067-0a1d-47a3-b30a-82506e6f9a21",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "42c693d0-e231-4eff-91cf-3b228f583c59",
+			"key": "kid",
+			"value": "QuickJobs_KEY",
+			"type": "string"
+		}
+	]
+}

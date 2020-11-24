@@ -1,0 +1,154 @@
+{
+	"info": {
+		"_postman_id": "2a67cfe5-93e1-4b2e-add5-d8b06e2ba386",
+		"name": "QuickJobs",
+		"description": "{\n\t\"user\": \"MB6anukh7u9\",\n\t\"pass\": \"Testing123!\"\n}",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User info",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8000/user-info",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"user-info"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User info",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"title\": \"Mrs\",\n\t\"given_name\": \"Lauras\",\n\t\"family_name\": \"Lavine\",\n\t\"country_of_birth\": \"United Kingdom\",\n\t\"address\": {\n\t\t\"street_address\": \"102 Mangrove Lane\",\n\t\t\"locality\": \"Doncaster\",\n\t\t\"postal_code\": \"C128VW\",\n\t\t\"country\": \"Scotland\"\n\t}\n}"
+				},
+				"url": {
+					"raw": "localhost:8000/user-info",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"user-info"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User info Yost Hilton",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"title\": \"Mrs\",\n\t\"given_name\": \"Yost\",\n\t\"family_name\": \"Hilton\",\n\t\"country_of_birth\": \"GB\",\n\t\"address\": {\n\t\t\"street_address\": \"19 Kacey Forest\",\n\t\t\"locality\": \"Redding\",\n\t\t\"postal_code\": \"QZBAD9\",\n\t\t\"country\": \"United Kingdom\"\n\t}\n}"
+				},
+				"url": {
+					"raw": "localhost:4201/user-info",
+					"host": [
+						"localhost"
+					],
+					"port": "4201",
+					"path": [
+						"user-info"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "verified",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:4201/verified?value=false",
+					"host": [
+						"localhost"
+					],
+					"port": "4201",
+					"path": [
+						"verified"
+					],
+					"query": [
+						{
+							"key": "value",
+							"value": "false"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "verified Copy",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://demo.iamid.io/verified?value=false",
+					"protocol": "https",
+					"host": [
+						"demo",
+						"iamid",
+						"io"
+					],
+					"path": [
+						"verified"
+					],
+					"query": [
+						{
+							"key": "value",
+							"value": "false"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reset journey",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "localhost:4201/reset",
+					"host": [
+						"localhost"
+					],
+					"port": "4201",
+					"path": [
+						"reset"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

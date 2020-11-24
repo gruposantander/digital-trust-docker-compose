@@ -1,0 +1,10 @@
+{
+  "pushedRequestURN": "urn:op.iamid.io:",
+  "issuer": "https://op.iamid.io",
+  "customAuthorizationEndpoint": "http://localhost:8081/web/login" ,
+  "pid_whitelist": {
+    "enabled": false,
+    "salt": "banana",
+    "list": ["84e658cf26917bf442bb7a83174697d28fdd94d70266dc8b79530f85663014a7"]
+  }
+}
