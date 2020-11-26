@@ -4,7 +4,7 @@ services:
 
   dtp-server:
     env_file: ./docker-compose.env
-    image: docker.pkg.github.com/gruposantander/digital-trust-universal-server/universal-server:latest
+    image: docker.pkg.github.com/gruposantander/digital-trust-universal-server/universal-server:proofs
     container_name: dtp-op-server
     hostname: dtpserver
     ports:
@@ -48,7 +48,7 @@ services:
       - dtp-spa-authorize
 
   dtp-graphql:
-    image: docker.pkg.github.com/gruposantander/digital-trust-graphql-stubs/graphql-stubs:latest
+    image: docker.pkg.github.com/gruposantander/digital-trust-graphql-stubs/graphql-stubs:proofs
     container_name: dtp-graphql
     hostname: dtpgraphql
     environment:
@@ -56,7 +56,7 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - ./mocks/people:/tmp/people
+      - ./mocks/people/proofs:/tmp/people
 
   dtp-mongodb:
     image: mongo:4.0.4

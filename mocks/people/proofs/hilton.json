@@ -1,0 +1,194 @@
+{
+    "username": "hilton",
+    "description": "Parent with Three Children",
+    "status": "Living with Partner",
+    "segment": "Pre School Parents",
+    "occupation": "Teacher",
+    "bio": "bla bla bla",
+    "personal_basic_details": {
+      "given_name":  "Yost",
+      "family_name": "Hilton",
+      "birthdate": "1985-05-22",
+      "title": "Mrs",
+      "gender": "Female",
+      "civil_status": "married",
+      "country_of_birth": "GB",
+      "nationality": "GB",
+      "ial": "2"
+    },
+    "business_basic_details": {
+        "company_registered_name": "Crafton School",
+        "company_trade_name": "Flaten Group Corp",
+        "company_type": "Education",
+        "company_start_date": "2015-06-13",
+        "company_end_date": "2015-06-13",
+        "company_country_incorporation": "GB",
+        "ial": "3"
+    },
+    "id_documents": [{
+        "type": "passport",
+        "identification": "SQ8RN5LX1",
+        "issuer_country": "GB",
+        "ial" : "3"
+    }, {
+        "type": "driving_license",
+        "identification": "HILT131123131206",
+        "issuer_country": "GB",
+        "ial" : "2"
+    }],
+    "addresses": [{
+        "formatted": "19 Kacey Forest, Redding, QZBAD9, United Kingdom",
+        "street_address": "19 Kacey Forest",
+        "locality": "Redding",
+        "region": "",
+        "postal_code": "QZBAD9",
+        "country": "United Kingdom",
+        "ial" : "2"
+    },{
+        "ial": "1",
+        "formatted": "33 Mountain, Lockhill, LH1AB8, United Kingdom",
+        "street_address": "Lockhill",
+        "locality": "33 Mountain",
+        "region": "",
+        "postal_code": "LH1AB8",
+        "country": "United Kingdom"
+    }],
+    "phone_numbers": [{
+        "value": "427444444",
+        "ial" : "2"
+    }, {
+        "value": "242055050",
+        "ial" : "1"
+    }],
+    "emails": [{
+        "value": "t1@test.com",
+        "ial" : "2"
+    }, {
+        "value": "t2@test.com",
+        "ial" : "1"
+    }],
+    "finances": [{
+        "currency": "GBP",
+        "total_balance": "22511.01",
+        "last_year_money_in": "18049.75",
+        "last_quarter_money_in": "16526.27",
+        "average_monthly_money_in": "1640.88",
+        "ial" : "3"
+    }, {
+        "currency": "EUR",
+        "total_balance": "15000.00",
+        "last_year_money_in": "8000.00",
+        "last_quarter_money_in": "2000.00",
+        "average_monthly_money_in": "500.00",
+        "ial" : "2"
+    }],
+    "bank_accounts": [{
+        "bankId": "09012700047186",
+        "type": "Personal",
+        "entity": "Bank A",
+        "product": "Current Account",
+        "country": "GB",
+        "currency": "GBP",
+        "ial" : "3",
+        "identifiers": [{
+          "type" : "UK.SortCodeAccountNumber",
+          "identification": "06089900072985"
+        },
+        {
+            "type" : "IBAN",
+            "identification": "UK000306089900072985"
+        }]
+
+    }, {
+        "bankId": "06089900072985",
+        "type": "Personal",
+        "entity": "Bank B",
+        "product": "Current Account",
+        "country": "GB",
+        "currency": "GBP",
+        "ial" : "3",
+        "identifiers" : [{
+            "type": "UK.SortCodeAccountNumber",
+            "identification": "09012700055123"
+        }]
+    }],
+    "proofs" : [
+        {
+            "proofId": "ref-0001",
+            "claims": ["given_name"],
+            "content_type": "verifiable-credential",
+            "content": {           
+                "@context": [
+                    "https://www.w3.org/2018/credentials/v1",
+                    "https://www.santander.co.uk/credentials/examples/v1"
+                ],
+                "type": "VerifiablePresentation",
+                "verifiableCredential": [
+                    {
+                    "@context": [
+                        "https://www.w3.org/2018/credentials/v1",
+                        "https://www.santander.co.uk/credentials/examples/v1"
+                    ],
+                    "type": ["VerifiableCredential", "DrivingLicenseCredential"],
+                    "credentialSchema": {
+                        "id": "did:example:cdf:35LB7w9ueWbagPL94T9bMLtyXDj9pX5o",
+                        "type": "did:example:schema:22KpkXgecryx9k7N6XN1QoN3gXwBkSU8SfyyYQG"
+                    },
+                    "issuer": "did:example:Wz4eUg7SetGfaUVCn8U9d62oDYrUJLuUtcy619",
+                    "credentialSubject": {
+                        "given_name": "Yost",
+                        "address": {
+                            "street_address": "33 Mountain, Lockhill, LH1AB8, United Kingdom",
+                            "locality": "Lockhill",
+                            "region": "",
+                            "postal_code": "LH1AB8",
+                            "country": "United Kingdom"
+                        }
+                    },
+                    "proof": {
+                        "type": "AnonCredDerivedCredentialv1",
+                        "primaryProof": "cg7wLNSi48K5qNyAVMwdYqVHSMv1Ur8i...Fg2ZvWF6zGvcSAsym2sgSk737",
+                        "nonRevocationProof": "mu6fg24MfJPU1HvSXsf3ybzKARib4WxG...RSce53M6UwQCxYshCuS3d2h"
+                    }
+                }],
+                "proof": {
+                    "type": "AnonCredPresentationProofv1",
+                    "proofValue": "DgYdYMUYHURJLD7xdnWRinqWCEY5u5fK...j915Lt3hMzLHoPiPQ9sSVfRrs1D"
+                }},
+            "expires": "2021-10-10",
+            "verified": "2018-10-12"
+        },
+        {
+            "proofId": "ref-0002",
+            "claims": ["address","birthdate"],
+            "content_type": "verifiable-credential",
+            "content": {    
+                "@context": [
+                    "https://www.w3.org/2018/credentials/v1",
+                    "https://api.vidchain.net/credentials/verifiable-id/v1"
+                  ],
+                  "id": "https://api.vidchain.net/api/v1/schemas/2391",
+                  "type": [
+                    "VerifiableCredential",
+                    "VerifiableIdCredential",
+                    "EssifVerifiableID"
+                  ],
+                  "credentialSubject": {
+                    "id": "did:vid:0x4D05eB74124B60056Ed6aeDA0B76Df6ab61F214A",
+                    "firstName": "Yost",
+                    "lastName": "Hilton",
+                    "dateOfBirth": "22/05/1985",
+                    "placeOfBirth": "Barcelona",
+                    "gender": "Female",
+                    "currentAddress": "19 Kacey Forest",
+                    "city": "Redding",
+                    "state": "",
+                    "zip": "QZBAD9"
+                  },
+                  "issuer": "did:vid:0xF996fc66a524eF766a15d9dae8dDD3A4Eb7796CB"       
+                },
+            "expires": "2021-10-10",
+            "verified": "2018-10-12"
+        }
+    ]
+}
