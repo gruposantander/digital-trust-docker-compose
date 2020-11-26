@@ -17,7 +17,7 @@ services:
       - dtp-mongodb
 
   dtp-spa-authorize:
-    image: docker.pkg.github.com/gruposantander/digital-trust-frontend/nginx-spa:latest
+    image: docker.pkg.github.com/gruposantander/digital-trust-docker-compose/frontend:latest
     container_name: dtp-spa
     hostname: dtpspa
     ports:
