@@ -1,6 +1,13 @@
 # digital-trust-docker-compose
 
-Docker compose to run all Digital Trust Protocol components in local.
+Docker compose to run all Digital Trust Protocol components in local, including:
+
+- DTP Server (OIDC extended with protocol specifications such as assertion claims and assurance levels)
+- DTP Server Database (MongoDB persistency for the DTP Server including client apps, tokens and requests)
+- DTP Data Provider Server (GraphQL Stubs backend with data for a set of customizable user personas)
+- DTP Front End (Logon and Consent application integrated with DTP Server)
+- DTP Demo (Sample application to demo E2E using te SDK and connected to DTP Server)
+
 Please go to [https://gruposantander.github.io/digital-trust-docs/](https://gruposantander.github.io/digital-trust-docs/) for more info.
 
 ## Setup 
@@ -13,6 +20,8 @@ Configure `docker-compose.env` with the following parameters:
 Included in this bundle you have a component running a graphql stubs servers for demo purposes. If you want to customize your users data, edit the files under `mocks/people` folder
 
 There are other internal configuration parameters available under `config` folders. Refer to the additional repos and documentation for further details.
+
+If you need a new claim but avoid having to adapt the backend (dtp-server), you can re-purpose one of the [existing claims](https://gruposantander.github.io/digital-trust-docs/docs/claims) taking into account the type structure (simple or object). To do that, simply modify the file `config\spa-authorize\custom-structure.json`. Then you can modify or create personas with your data using the selected claim.
 
 ## Up server
 
